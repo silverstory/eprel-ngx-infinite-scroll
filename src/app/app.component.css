@@ -1,6 +1,22 @@
-p {
+.items {
   font-family: Lato;
 }
 .search-results {
   height: 100%;
+}
+.example-card {
+  max-width: 400px;
+}
+
+.example-card p {
+  font-size: 0.9em;
+}
+
+.example-header-image {
+  background-image: url('https://www.freeiconspng.com/uploads/flat-face-icon-23.png');
+  background-size: cover;
+}
+
+.tag {
+    font-size: 2.2em;
 }

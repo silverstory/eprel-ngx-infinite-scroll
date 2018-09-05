@@ -4,9 +4,29 @@
       [infiniteScrollThrottle]="throttle"
       (scrolled)="onScrollDown()"
       >
-  <p *ngFor="let i of news">
-    {{ i.title }}
-  </p>
-  <!-- <p class="tag is-warning" *ngIf="page.done | async">I ran out of boats!</p> -->
+  <div class="items" *ngFor="let i of items">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>{{ i.name.first }} {{ i.name.last }}</mat-card-title>
+        <mat-card-subtitle>OP Employee</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src="{{ i.photothumbnailurl }}" alt="Photo">
+      <mat-card-content>
+        <p>
+          Mr/Ms. <b>{{ i.name.last }}</b> is requesting to have access to these areas Code 1, Code 2.
+          He/she is an <b style="color: red">{{ i.recordstatus }}</b>&nbsp;<b>{{ i.distinction }}</b> and an <b>{{ i.employee.position }}</b> from the Office of the President who is currently employed at <b>{{ i.employee.office }}</b>.
+          There is no history in the records that this person has been blacklisted from entering Malacanang Complex.
+          His/her permitted access level is: <b>{{ i.personaccesslevel }}</b> which is currently <b>{{ i.accessapproval }}</b>.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary">PROCESS</button>
+        <button mat-raised-button color="accent">DENY</button> <!-- SHOULD STATE DENY REASON ON MODAL DIALOG WHEN CLICKED -->
+      </mat-card-actions>
+    </mat-card>
+
+  </div>
+  <p class="tag is-warning" *ngIf="done | async">I ran out of profiles!</p>
   <app-loading-spinner *ngIf="loading | async"></app-loading-spinner>
 </div>
