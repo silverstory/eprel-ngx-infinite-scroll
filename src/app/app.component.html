@@ -4,7 +4,7 @@
       [infiniteScrollThrottle]="throttle"
       (scrolled)="onScrollDown()"
       >
-  <div class="items" *ngFor="let i of items">
+  <div class="items" *ngFor="let i of items | async">
     <mat-card class="example-card">
       <mat-card-header>
         <div mat-card-avatar class="example-header-image"></div>
@@ -14,19 +14,19 @@
       <img mat-card-image src="{{ i.photothumbnailurl }}" alt="Photo">
       <mat-card-content>
         <p>
-          Mr/Ms. <b>{{ i.name.last }}</b> is requesting to have access to these areas Code 1, Code 2.
-          He/she is an <b style="color: red">{{ i.recordstatus }}</b>&nbsp;<b>{{ i.distinction }}</b> and an <b>{{ i.employee.position }}</b> from the Office of the President who is currently employed at <b>{{ i.employee.office }}</b>.
-          There is no history in the records that this person has been blacklisted from entering Malacanang Complex.
-          His/her permitted access level is: <b>{{ i.personaccesslevel }}</b> which is currently <b>{{ i.accessapproval }}</b>.
+          &#9679; Mr/Ms. <b>{{ i.name.last }}</b> is requesting to have access to these areas <strong>{{ getAccess(i.access.one, i.access.two, i.access.three, i.access.four) }}</strong>.
+          <br>&#9679; He/she is an <b style="color: red">{{ i.recordstatus }}</b>&nbsp;<b>{{ i.distinction }}</b> who <span *ngIf="i.recordstatus === 'ACTIVE'">currently</span><span *ngIf="i.recordstatus === 'INACTIVE'">recently</span> holds the position <b>{{ i.employee.position }}</b> at the <b>{{ i.employee.office }}</b>.
+          <br>&#9679; Based on the records, there is no history that this person has been blacklisted from entering Malacanang Complex.
+          <br>&#9679; His/her most recent access level is <b>{{ i.personaccesslevel }}</b> with current <b>{{ i.accessapproval }}</b> status.
         </p>
+        <!-- arrow 9658 square 9632 -->
       </mat-card-content>
       <mat-card-actions>
         <button mat-raised-button color="primary">PROCESS</button>
         <button mat-raised-button color="accent">DENY</button> <!-- SHOULD STATE DENY REASON ON MODAL DIALOG WHEN CLICKED -->
       </mat-card-actions>
     </mat-card>
-
   </div>
-  <p class="tag is-warning" *ngIf="done | async">I ran out of profiles!</p>
+  <p class="tag is-warning" *ngIf="done | async">I ran out of files!</p>
   <app-loading-spinner *ngIf="loading | async"></app-loading-spinner>
 </div>

@@ -51,13 +51,18 @@ export class AppComponent implements OnInit {
   private findfield = 'Approved';
   private limit = 2;
 
+  // hasNext: boolean;
+  // next: string;
+  // queryText: string;
+  // find: string;
+
   constructor(private http: HttpClient) { }
 
   public ngOnInit() {
     this.showFirst();
   }
 
-  showFirst() {
+  public showFirst() {
     this.find.next(this.findfield);
     this._loading.next(true);
     this.getItems(
@@ -65,6 +70,7 @@ export class AppComponent implements OnInit {
       this.limit,
       (items) => {
         this._items.next(this._items.getValue().concat(items.results));
+        // this.items = await this.items.concat(items.results);
         this._loading.next(false);
         this.hasNext.next(items.hasNext);
         this.next.next(items.next);
@@ -75,11 +81,14 @@ export class AppComponent implements OnInit {
   }
 
   onScrollDown(ev) {
-    console.log('p');
+    console.log('scrolled down!!', ev);
+    console.log(this.next.getValue());
+    console.log(this.hasNext.getValue());
+    console.log(this._done.getValue());
     this.showNext();
   }
 
-  showNext() {
+  public showNext() {
     if (this._done.getValue() === false) {
       this.find.next(this.findfield);
       this._loading.next(true);
@@ -88,6 +97,7 @@ export class AppComponent implements OnInit {
         this.limit,
         (items) => {
           this._items.next(this._items.getValue().concat(items.results));
+          // this.items = await this.items.concat(items.results);
           this._loading.next(false);
           this.hasNext.next(items.hasNext);
           this.next.next(items.next);
@@ -105,23 +115,19 @@ export class AppComponent implements OnInit {
     const next = this.next.getValue();
     switch (ordinal) {
       case 'first':
-        // with paginatedfield and sort ascending
         // tslint:disable-next-line:max-line-length
-        // this.queryText.next(`http://localhost:3000/api/profile/accessapprovals?ordinal=${ordinal}&findtext=${find}&limit=${limit}&paginatedfield=_id`);
-        this.queryText.next(`http://localhost:3000/api/profile/accessapprovals?ordinal=${ordinal}&findtext=${find}&limit=${limit}`);
+        this.queryText.next(`http://localhost:3000/api/profile/accessapprovals?ordinal=${ordinal}&findtext=${find}&limit=${limit}&paginatedfield=accessdatetagged`);
         break;
       case 'next':
-        // with paginatedfield and sort ascending
         // tslint:disable-next-line:max-line-length
-        // this.queryText.next(`http://localhost:3000/api/profile/accessapprovals?ordinal=${ordinal}&findtext=${find}&limit=${limit}&paginatedfield=_id&next=${next}`);
-        // tslint:disable-next-line:max-line-length
-        this.queryText.next(`http://localhost:3000/api/profile/accessapprovals?ordinal=${ordinal}&findtext=${find}&limit=${limit}&next=${next}`);
+        this.queryText.next(`http://localhost:3000/api/profile/accessapprovals?ordinal=${ordinal}&findtext=${find}&limit=${limit}&paginatedfield=accessdatetagged&next=${next}`);
         break;
     }
+
     return this.http.get(this.queryText.getValue(), this.httpOptions)
       .pipe(
         skipWhile(() => this.httpReqestInProgress),
-        tap((items: any[]) => { this.httpReqestInProgress = true; })
+        tap(() => { this.httpReqestInProgress = true; })
       )
       .subscribe((items: any[]) => {
         saveResultsCallback(items);
